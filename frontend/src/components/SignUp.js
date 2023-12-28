@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import '../css/auth.css';
 import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 
 // Create SignUp component
@@ -21,21 +22,24 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { fullName, email, password } = formData;
-      const { data } = await axios.post(/register/, {
-        fullName,
-        email,
-        password,
-      });
+    // if(!fullName || !email || !password){
+    //   toast.error("Please fill the complete form")
+    // }
+      // const { data } = await axios.post('http://localhost:5000/api/register/', {
+      //   fullName,
+      //   email,
+      //   password,
+      // });
 
-      if (data.status === false) {
-        console.log("Error occured");
-        return;
-      }
-      localStorage.setItem(
-        process.env.REACT_APP_LOCALHOST_KEY,
-        JSON.stringify(data.user)
-      );
-      navigate("/");
+      // if (data.status === false) {
+      //   console.log("Error occured");
+      //   return;
+      // }
+      // localStorage.setItem(
+      //   process.env.REACT_APP_LOCALHOST_KEY,
+      //   JSON.stringify(data.user)
+      // );
+      // navigate("/");
       console.log('Form submitted:', formData);
   };
 
@@ -56,7 +60,7 @@ const SignUp = () => {
               name="fullName"
               value={formData.fullName}
               onChange={handleInputChange}
-              required
+              // required
             />
           </div>
 
@@ -72,7 +76,7 @@ const SignUp = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              required
+              // required
             />
           </div>
 
@@ -88,7 +92,7 @@ const SignUp = () => {
               name="password"
               value={formData.password}
               onChange={handleInputChange}
-              required
+              // required
             />
           </div>
 
@@ -104,7 +108,7 @@ const SignUp = () => {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleInputChange}
-              required
+              // required
             />
           </div>
 

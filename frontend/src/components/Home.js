@@ -4,16 +4,18 @@ import ChatBox from './ChatBox'
 
 const Home = () => {
   return (
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-4 col-lg-3">
-          <div class="bg-primary text-light p-3">
-            <h4>Sidebar</h4>
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-md-6 col-lg-3 border-dark-subtle min-vh-100 bg-light ">
+          <div className="text-center text-black p-3  ">
+            <h4>Users</h4>
+            <Sidebar />
           </div>
         </div>
-        <div class="col-md-8 col-lg-9">
-          <div class="bg-light p-3">
+        <div className="col-md-6 col-lg-9 min-vh-100 border-5 bg-white">
+          <div className="p-3 text-center text-black">
             <h4>Chat Box</h4>
+            <ChatBox />
           </div>
         </div>
       </div>

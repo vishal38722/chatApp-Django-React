@@ -1,8 +1,39 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import axios from "axios";
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import axios from "axios";
 
 const ForgotPassword = () => {
+  const [email, setEmail] = useState('');
+  const [isEmailSent, setIsEmailSent] = useState(false);
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if(!email){
+        toast.error("Please enter your email");
+        return;
+    }
+
+    try{  
+        const res = await axios.post("http://localhost:5000/api/forgot-password", email);
+
+        //TODO
+        setIsEmailSent(true);
+        toast.success("Email sent successfully!");
+
+    }catch (error){
+        console.log(error);
+        toast.error(`Something went wrong ${error}`)
+    }finally{
+        setIsEmailSent(true);
+        setEmail("");
+    }
+
+  }
   const [email, setEmail] = useState('');
   const [isEmailSent, setIsEmailSent] = useState(false);
 
@@ -63,6 +94,8 @@ const ForgotPassword = () => {
         </div>
       </div>
     </div>
+  );
+};
   );
 };
 

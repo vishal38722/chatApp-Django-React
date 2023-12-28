@@ -17,12 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from rest_framework.authtoken import views
-from paralaxiom_auth.views import RegisterUser,login
+from paralaxiom_auth.views import Register_api,login_api,get_user_data
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api-token-auth/', views.obtain_auth_token),
-    path("register/",RegisterUser.as_view()),
-    path("login/",login.as_view()),
+    path("register/",Register_api),
+    path("user/",get_user_data),
+    path("login/",login_api),
 ]

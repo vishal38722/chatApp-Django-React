@@ -6,6 +6,7 @@ import {Toaster} from "react-hot-toast";
 import Home from './components/Home';
 import ForgotPassword from './components/ForgotPassword';
 import Error404 from './components/Error404';
+import ResetPassword from './components/ResetPassword';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />}/>
           <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/forgot-password/:token' element={<ResetPassword />} />
           <Route path='*' element={<Error404 />} />
         </Routes>
       </BrowserRouter>

@@ -18,18 +18,15 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
-      const { data } = await axios.post(/login/, {
+      const { data } = await axios.post('http://localhost:8000/login/', {
         email,
         password,
       });
-      if (data.status === false) {
-        console.log("Error occured");
-        return;
-      }
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
-        );
+      
+        // localStorage.setItem(
+        //   process.env.REACT_APP_LOCALHOST_KEY,
+        //   JSON.stringify(data.user)
+        // );
         navigate("/");
     console.log('Login Successful:', formData);
   };

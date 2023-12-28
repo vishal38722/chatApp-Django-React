@@ -9,7 +9,7 @@ import axios from 'axios';
 const SignUp = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    fullName: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -21,25 +21,17 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { fullName, email, password } = formData;
-    // if(!fullName || !email || !password){
-    //   toast.error("Please fill the complete form")
-    // }
-      // const { data } = await axios.post('http://localhost:5000/api/register/', {
-      //   fullName,
-      //   email,
-      //   password,
-      // });
+    const { username, email, password } = formData;
+    if(!username || !email || !password){
+      toast.error("Please fill the complete form")
+    }
+      const { data } = await axios.post('http://localhost:8000/register/', {
+        username,
+        email,
+        password,
+      });
 
-      // if (data.status === false) {
-      //   console.log("Error occured");
-      //   return;
-      // }
-      // localStorage.setItem(
-      //   process.env.REACT_APP_LOCALHOST_KEY,
-      //   JSON.stringify(data.user)
-      // );
-      // navigate("/");
+      navigate("/");
       console.log('Form submitted:', formData);
   };
 
@@ -49,16 +41,16 @@ const SignUp = () => {
         <h2 className="">Create a new Account</h2>
         <form className="mt-3" onSubmit={handleSubmit}>
           <div className="">
-            <label htmlFor="fullName" className="form-label">
+            <label htmlFor="username" className="form-label">
               Full Name
             </label>
             <input
               type="text"
               className="form-control"
-              id="fullName"
+              id="username"
               placeholder="Enter full name"
-              name="fullName"
-              value={formData.fullName}
+              name="username"
+              value={formData.username}
               onChange={handleInputChange}
               // required
             />

@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "paralaxiom_auth",
     "api",
-    "rest_framework.authtoken",
+    "knox",
 ]
 
 MIDDLEWARE = [
@@ -127,5 +127,6 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-
-
+REST_FRAMEWORK={
+    'DEFAULT_AUTHENTICATION_CLASSES':('knox.auth.TokenAuthentication',)   
+}

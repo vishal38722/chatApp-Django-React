@@ -22,13 +22,9 @@ const Login = () => {
         email,
         password,
       });
-      
-        // localStorage.setItem(
-        //   process.env.REACT_APP_LOCALHOST_KEY,
-        //   JSON.stringify(data.user)
-        // );
-        navigate("/");
-    console.log('Login Successful:', formData);
+      console.log(data)
+      navigate("/");
+      console.log('Login Successful');
   };
 
   return (

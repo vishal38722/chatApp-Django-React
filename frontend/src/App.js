@@ -8,7 +8,7 @@ import ForgotPassword from './components/ForgotPassword';
 import Error404 from './components/Error404';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
-import RessetPassword from './components/RessetPassword';
+import RessetPassword from './components/ResetPassword';
 
 
 function App() {

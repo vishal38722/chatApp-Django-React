@@ -22,17 +22,18 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { username, email, password } = formData;
-    if(!username || !email || !password){
-      toast.error("Please fill the complete form")
-    }
-      const { data } = await axios.post('http://localhost:8000/register/', {
+    // if(!username || !email || !password){
+    //   toast.error("Please fill the complete form")
+    //   return;
+    // }
+      const { data } = await axios.post("http://127.0.0.1:8000/register/", {
         username,
         email,
         password,
       });
-
+      console.log(data)
       navigate("/");
-      console.log('Form submitted:', formData);
+      console.log('SignUp Successful');
   };
 
   return (
@@ -52,7 +53,7 @@ const SignUp = () => {
               name="username"
               value={formData.username}
               onChange={handleInputChange}
-              // required
+              required
             />
           </div>
 
@@ -68,7 +69,7 @@ const SignUp = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              // required
+              required
             />
           </div>
 
@@ -84,7 +85,7 @@ const SignUp = () => {
               name="password"
               value={formData.password}
               onChange={handleInputChange}
-              // required
+              required
             />
           </div>
 
@@ -100,7 +101,7 @@ const SignUp = () => {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleInputChange}
-              // required
+              required
             />
           </div>
 

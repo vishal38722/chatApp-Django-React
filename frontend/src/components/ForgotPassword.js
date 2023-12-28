@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import axios from "axios";
-import React, { useState } from 'react';
-import toast from 'react-hot-toast';
-import axios from "axios";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -33,40 +30,13 @@ const ForgotPassword = () => {
         setEmail("");
     }
 
-  }  const [email, setEmail] = useState('');
-  const [isEmailSent, setIsEmailSent] = useState(false);
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if(!email){
-        toast.error("Please enter your email");
-        return;
-    }
-
-    try{  
-        const res = await axios.post("http://localhost:5000/api/forgot-password", email);
-
-        //TODO
-        setIsEmailSent(true);
-        toast.success("Email sent successfully!");
-
-    }catch (error){
-        console.log(error);
-        toast.error(`Something went wrong ${error}`)
-    }finally{
-        setIsEmailSent(true);
-        setEmail("");
-    }
-
   }
 
   return (
-    <div className='d-flex align-items-center justify-content-center bg-dark-subtle  min-vw-100 min-vh-100'>
+    <div className='d-flex align-items-center justify-content-center bg-dark-subtle min-vw-100 min-vh-100'>
       <div className='container'>
         <div className='row'>
-          <div className='col-md-4 offset-md-4'>
+          <div className='m-5' style={{minWidth:"30vw"}}>
             <form onSubmit={handleSubmit} className='p-4 border rounded bg-white '>
               <h3 className='mb-4 text-center'>Forgot Password ?</h3>
               <div className='mb-3 text-start'>

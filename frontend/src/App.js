@@ -9,7 +9,6 @@ import Error404 from './components/Error404';
 import ResetPassword from './components/ResetPassword';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
-import ResetPassword from './components/ResetPassword';
 
 
 function App() {

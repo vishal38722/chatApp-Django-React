@@ -18,7 +18,7 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // API calling
+    
     console.log('Form submitted:', formData);
   };
 

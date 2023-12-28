@@ -1,10 +1,12 @@
 // Import necessary dependencies
 import React, { useState } from 'react';
 import '../css/auth.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // Create SignUp component
 const SignUp = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -16,10 +18,25 @@ const SignUp = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // API calling
-    console.log('Form submitted:', formData);
+    const { fullName, email, password } = formData;
+      const { data } = await axios.post(/register/, {
+        fullName,
+        email,
+        password,
+      });
+
+      if (data.status === false) {
+        console.log("Error occured");
+        return;
+      }
+      localStorage.setItem(
+        process.env.REACT_APP_LOCALHOST_KEY,
+        JSON.stringify(data.user)
+      );
+      navigate("/");
+      console.log('Form submitted:', formData);
   };
 
   return (

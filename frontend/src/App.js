@@ -8,7 +8,7 @@ import ForgotPassword from './components/ForgotPassword';
 import Error404 from './components/Error404';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
-import ResetPassword from './components/ResetPassword';
+import RessetPassword from './components/RessetPassword';
 
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/signup' element={<SignUp />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/forgot-password/:token' element={<ResetPassword />} />
+          <Route path='/forgot-password/:token' element={<RessetPassword />} />
           <Route path='*' element={<Error404 />} />
 
         </Routes>

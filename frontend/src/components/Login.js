@@ -1,9 +1,11 @@
 // Import necessary dependencies
 import React, { useState } from 'react';
 import '../css/auth.css'; 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -13,10 +15,23 @@ const Login = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // API calling
-    console.log('Form submitted:', formData);
+    const { email, password } = formData;
+      const { data } = await axios.post(/login/, {
+        email,
+        password,
+      });
+      if (data.status === false) {
+        console.log("Error occured");
+        return;
+      }
+        localStorage.setItem(
+          process.env.REACT_APP_LOCALHOST_KEY,
+          JSON.stringify(data.user)
+        );
+        navigate("/");
+    console.log('Login Successful:', formData);
   };
 
   return (

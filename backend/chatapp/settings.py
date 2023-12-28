@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-_t@6y_-h2e$3vtn5%uvhp5ljm$%n-e^8rk)o%hpd=za32t+!rc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -50,6 +50,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 
 ]
 
@@ -130,3 +132,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK={
     'DEFAULT_AUTHENTICATION_CLASSES':('knox.auth.TokenAuthentication',)   
 }
+CORS_ORIGIN_ALLOW_ALL = True

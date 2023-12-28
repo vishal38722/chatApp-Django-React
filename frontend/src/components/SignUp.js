@@ -26,7 +26,7 @@ const SignUp = () => {
     //   toast.error("Please fill the complete form")
     //   return;
     // }
-      const { data } = await axios.post("http://127.0.0.1:8000/register/", {
+      const { data } = await axios.post("/register/", {
         username,
         email,
         password,

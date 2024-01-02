@@ -30,7 +30,6 @@ def login_api(request):
 @api_view(['GET'])
 def get_user_data(request):
     user=request.user
-    
     if user.is_authenticated:
           return Response({
             'user_info':{

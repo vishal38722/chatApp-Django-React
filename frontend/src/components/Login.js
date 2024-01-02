@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import '../css/auth.css'; 
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,13 +19,21 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
+    try{
+
       const { data } = await axios.post('/login/', {
         email,
         password,
       });
-      console.log(data)
-      navigate("/");
+      console.log(data);
+      localStorage.setItem('token', data.token);
       console.log('Login Successful');
+      toast.success("Login Successful");
+      navigate("/");
+    }catch(error){
+      console.log(error);
+      toast.error("Something went wrong!")
+    }
   };
 
   return (

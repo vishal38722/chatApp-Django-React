@@ -31,3 +31,11 @@ function App() {
 }
 
 export default App;
+
+// Sidebar - fetch all users
+// message schema (sender{email, name}, receiver{email, name}, message, timestamp)
+// on click of a user the props will be passed to the chatbox component
+// chatbox component will fetch all the messages between the two users (useEffect)
+// pass the name and email in header component
+// user info(edit profile) page/modal where user can update name, email or password
+// webSocket integration

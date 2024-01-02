@@ -42,7 +42,7 @@ const ChatBox = ({userId}) => {
 
   
   useEffect(() => {
-    const dummyMessages = generateDummyMessages(1);
+    const dummyMessages = generateDummyMessages(1);// API call
     setMessages((prevMessages) => [...prevMessages, ...dummyMessages]);
   }, []);
 
@@ -56,11 +56,13 @@ const ChatBox = ({userId}) => {
   return (
     <div style={{width: "inherit"}}>
       <Header />
+      {/* Chat area */}
       <div style={{paddingBottom: "7rem", height:"calc(100vh - 7rem)", overflow: "auto"}}>
         {messages.map((message) => (
           <MessageBox data={message} key={message.id} />
         ))}
       </div>
+      {/* form */}
       <div className="fixed-bottom d-flex align-items-center flex-row justify-content-end rounded-3">
         <div className="col-12 col-md-6 col-lg-9 offset-md-3 bg-light p-1">
           <form onSubmit={handleSubmit} className="d-flex align-items-center flex-row justify-content-end  gap-3 ">

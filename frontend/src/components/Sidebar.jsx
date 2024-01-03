@@ -1,8 +1,9 @@
-import React from 'react'
-import { users } from '../utils/constants'
+import React, { useEffect, useState } from 'react';
+// import { users } from '../utils/constants'
 import UserItem from './UserItem'
 
-const Sidebar = ({onUserClick}) => {
+const Sidebar = ({users, onUserClick}) => {
+  
   return (
     <div>
         {users.map((user) => (

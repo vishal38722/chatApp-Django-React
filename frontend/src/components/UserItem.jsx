@@ -4,14 +4,15 @@ import { FaUser } from "react-icons/fa";
 const UserItem = ({user, onUserClick}) => {
   return (
     <>  
-        <div className="w-100 card mb-2 overflow-wrap-break-word" onClick={() => onUserClick(user.id)}>
+        <div className="w-100 card mb-2 overflow-wrap-break-word" onClick={() => onUserClick(user)}>
             <div className="d-flex align-items-center justify-content-start">
                 <span className="me-3">
                     <FaUser size={40} />
                 </span>
                 <div>
                     <p className="fw-bold text-gray-800 mb-1">
-                        {user.name}
+                        {/* {user.name} */}
+                        {`${user.first_name} ${user.last_name}`}
                     </p>
                     <span className="text-muted fs-6">
                         {user.email}

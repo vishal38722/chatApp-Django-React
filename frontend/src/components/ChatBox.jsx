@@ -5,7 +5,7 @@ import {HiPaperAirplane} from "react-icons/hi2";
 import MessageBox from "./MessageBox";
 import Header from "./Header";
 
-const ChatBox = ({userId}) => {
+const ChatBox = ({user}) => {
 
   const [newMessage, setNewMessage] = useState("")
 
@@ -55,7 +55,7 @@ const ChatBox = ({userId}) => {
 
   return (
     <div style={{width: "inherit"}}>
-      <Header />
+      <Header user={user}/>
       {/* Chat area */}
       <div style={{paddingBottom: "7rem", height:"calc(100vh - 7rem)", overflow: "auto"}}>
         {messages.map((message) => (

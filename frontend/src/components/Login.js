@@ -1,11 +1,16 @@
 // Import necessary dependencies
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/auth.css'; 
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const Login = () => {
+  useEffect(() => {
+    if(localStorage.getItem('token')){
+      navigate('/')
+    }
+  }, [])
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -21,7 +26,7 @@ const Login = () => {
     const { email, password } = formData;
     try{
 
-      const { data } = await axios.post('/login/', {
+      const { data } = await axios.post('http://localhost:8000/login/', {
         email,
         password,
       });

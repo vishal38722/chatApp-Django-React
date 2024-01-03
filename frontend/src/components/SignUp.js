@@ -1,5 +1,5 @@
 // Import necessary dependencies
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/auth.css';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -7,6 +7,11 @@ import axios from 'axios';
 
 // Create SignUp component
 const SignUp = () => {
+  useEffect(() => {
+    if(localStorage.getItem('token')){
+      navigate('/')
+    }
+  }, [])
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
@@ -26,7 +31,7 @@ const SignUp = () => {
     //   toast.error("Please fill the complete form")
     //   return;
     // }
-      const { data } = await axios.post("/register/", {
+      const { data } = await axios.post("http://localhost:8000/register/", {
         username,
         email,
         password,

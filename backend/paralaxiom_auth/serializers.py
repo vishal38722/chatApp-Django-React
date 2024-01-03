@@ -1,32 +1,50 @@
-from rest_framework import serializers,validators
-from django.contrib.auth.models import User
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate
 
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ("username","email", "password")
+class UserSerializer(serializers.ModelSerializer):
+    password=serializers.CharField(write_only=True)
 
-        extra_kwargs={
-            "password": {"write_only": True},
-            "email": {
-                "required": True,
-                "allow_blank":False,
-                "validators":[
-                    validators.UniqueValidator(
-                        User.objects.all(), "Auser with email id already exist"
-
-                    )
-                ]
-            }
-        }
 
     def create(self, validated_data):
-        username=validated_data.get('username')
-        email=validated_data.get('email')
-        password=validated_data.get('password')
-        user=User.objects.create(
-            username=username,
-            email=email,
-            password=password
+        print("--------------*******--------------")
+        user = get_user_model().objects.create_user(
+            email=validated_data['email'],
+            password=validated_data['password'],
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', '')
         )
+        print(user)
         return user
+
+    class Meta:
+        model=get_user_model()
+        fields=['email','password','first_name','last_name']
+        extra_kwargs={'password': { 'write_only':True}}
+
+class LoginSerializer(serializers.Serializer):
+    email=serializers.EmailField()
+    id= serializers.CharField(max_length=15,read_only=True)
+    password=serializers.CharField(max_length=255,write_only=True)
+    def validate(self, data):
+        email=data.get("email",None)
+        password=data.get("password",None)
+
+        if email is None:
+             raise serializers.ValidationError("An email field is required for login")
+        
+        if password is None:
+            raise serializers.ValidationError("Password for login can not None")
+        
+        user=authenticate(username=email,password=password)
+
+        if user is None:
+            raise serializers.ValidationError("Invalid email or password")
+        
+        if not user.is_active:
+            raise serializers.ValidationError("user is not active")
+        
+        return {
+            "email": user.email,
+            "id": user.id
+        }

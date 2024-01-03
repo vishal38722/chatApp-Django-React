@@ -1,58 +1,57 @@
-from knox.auth import AuthToken
-from .serializers import RegisterSerializer
+from .serializers import UserSerializer,LoginSerializer
 from rest_framework import status
-from knox.auth import TokenAuthentication
+from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+
 @api_view(['POST'])
 def login_api(request):
-    email = request.data.get('email')
-    password = request.data.get('password')
-    user = User.objects.filter(email=email,password=password)
-    print(user)
+    serializer=LoginSerializer(data=request.data)
+    if serializer.is_valid():
 
-    # user = authenticate(request,username=username, password=password)
-    if user:
-        # if(AuthToken.objects.filter(token))
-        _, token = AuthToken.objects.create(user[0])
-        return Response({
-            'user_info':{
-                'email':email
-            },
-                'token': token})
-    else:
-        return Response({'error': 'Invalid credentials'}, status=401)
+        user_id = serializer.validated_data.get('id')
+        print(user_id)
+        try:
+            user = get_user_model().objects.get(id=user_id)  # Retrieve the user based on 'user_id'
+            token, _ = Token.objects.get_or_create(user=user)
+
+            return Response({
+                'message': "Login Successful",
+                'user_id': user.id,  # Include the user ID in the response
+                'First Name': user.first_name,
+                'Last Name': user.last_name,
+                'token': token.key  # Include token key in the response
+            })
+
+        except get_user_model().DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    
 
 
-
-@api_view(['GET'])
-def get_user_data(request):
-    user=request.user
-    if user.is_authenticated:
-          return Response({
-            'user_info':{
-                'id':user.id,
-                'username':user.username,
-                'email':user.email
-            },
-        })
+# @api_view(['GET'])
+# def get_user_data(request):
+#     user=request.user
+    
+#     if user.is_authenticated:
+#           return Response({
+#             'user_info':{
+#                 'id':user.id,
+#                 'username':user.username,
+#                 'email':user.email
+#             },
+#         })
     
 
 @api_view(['POST'])
 def Register_api(request):
       
-      serializer=RegisterSerializer(data=request.data)
-      serializer.is_valid(raise_exception=True)
-      user=serializer.save()
-      _,token=AuthToken.objects.create(user)
-      return Response({
-            'user_info':{
-                'id':user.id,
-                'username':user.username,
-                'email':user.email
-            },
-            'token':token
-        }
-        )
+      serializer=UserSerializer(data=request.data)
+      if serializer.is_valid():
+           
+        serializer.save()
+        return Response(serializer.data,status=201)
+      
+      return Response(serializer.errors,400)

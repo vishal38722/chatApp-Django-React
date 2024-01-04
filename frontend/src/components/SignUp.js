@@ -1,6 +1,6 @@
 // Import necessary dependencies
 import React, { useEffect, useState } from 'react';
-import '../css/auth.css';
+import '../css/style.css';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
@@ -37,7 +37,7 @@ const SignUp = () => {
         password,
       });
       console.log(data)
-      navigate("/");
+      navigate("/login");
       console.log('SignUp Successful');
   };
 
@@ -83,7 +83,7 @@ const SignUp = () => {
               Password
             </label>
             <input
-              type="password"
+              type="text"
               className="form-control"
               id="password"
               placeholder="Password"
@@ -99,7 +99,7 @@ const SignUp = () => {
               Confirm Password
             </label>
             <input
-              type="password"
+              type="text"
               className="form-control"
               id="confirmPassword"
               placeholder="Confirm Password"

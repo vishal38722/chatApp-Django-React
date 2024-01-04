@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import Sidebar from './Sidebar'
 import ChatBox from './ChatBox'
 import EmptyState from './EmptyState'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 const Home = () => {
@@ -41,7 +41,9 @@ const Home = () => {
       <div className="row">
         <div className="col-md-6 col-lg-3 border-dark-subtle p-3 rounded-3  bg-secondary-subtle">
           <div className="text-center text-black ">
+          <Link to="/profile" className="text-decoration-none text-black mb-3">
             <h4>Users</h4>
+            </Link>
             <Sidebar users={users} onUserClick={handleUserClick} />
           </div>
         </div>

@@ -9,6 +9,14 @@ from rest_framework.permissions import BasePermission
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
+from rest_framework import status
+from rest_framework.views import APIView
+# from rest_framework.permissions import AllowAny  
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User
+from django.contrib.auth import update_session_auth_hash
+from .serializers import ChangePasswordSerializer
+
 class CustomTokenAuthentication(BaseAuthentication):
     def authenticate(self, request):
         auth_header = request.headers.get('Authorization')
@@ -44,3 +52,32 @@ def get_user_list(request):
     except Exception as e:
         print("Error in getting user list", str(e))
         return Response({"error": "Error in getting user list"}, status=400)
+    
+@api_view(["POST"])
+@authentication_classes([CustomTokenAuthentication])
+@permission_classes([IsCustomAuthenticated])
+def change_password(request):
+    # permission_classes = [AllowAny]
+    # permission_classes = ([IsCustomAuthenticated])
+
+    # def post(self, request):
+    serializer = ChangePasswordSerializer(data=request.data)
+
+    if serializer.is_valid():
+        user = request.user
+        old_password = serializer.validated_data['old_password']
+        new_password = serializer.validated_data['new_password']
+
+        # Check old password
+        if not user.check_password(old_password):
+            return Response({'detail': 'Old password is incorrect.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Change the password
+        user.set_password(new_password)
+        user.save()
+
+        # Update session auth hash for the current session
+        update_session_auth_hash(request, user)
+
+        return Response({'detail': 'Password changed successfully.'}, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

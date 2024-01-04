@@ -8,8 +8,8 @@ class UserProfile extends Component {
 
     this.state = {
       userInfo: {},
-      password: '',
-      newPassword: '',
+      old_password: '',
+      new_password: '',
       changePassword: false,
     };
 
@@ -19,46 +19,42 @@ class UserProfile extends Component {
   handleUpdatePassword = async (e) => {
     e.preventDefault();
 
-    const { password, newPassword } = this.state;
+    const { old_password, new_password } = this.state;
 
-    if (!password || !newPassword) {
+    if (!old_password || !new_password) {
       toast.error("Please fill all the fields");
       return;
     }
 
-    if (newPassword.length < 8) {
-      toast.error("Password length should be greater than or equal to 8");
-      return;
-    }
+    // if (new_password.length < 8) {
+    //   toast.error("Password length should be greater than or equal to 8");
+    //   return;
+    // }
 
-    if (newPassword.length > 12) {
-      toast.error("Password length should be less than or equal to 12");
-      return;
-    }
+    // if (new_password.length > 12) {
+    //   toast.error("Password length should be less than or equal to 12");
+    //   return;
+    // }
 
     try {
-      const body = { password, newPassword };
-      const res = await axios.patch("/update-password/", body, {
+      const body = { old_password, new_password };
+      const res = await axios.post("http://localhost:8000/api/change-password/", body, {
         headers: {
           'Authorization': `Token ${this.token}`,
+          'Content-Type': 'application/json',
         },
       });
-
-      if (res.data.success === false) {
-        toast.error(res.data.message);
-        return;
-      }
-
+      console.log(res.status)
       toast.success("Password changed successfully");
-      this.setState({ newPassword: '', password: '', changePassword: false });
+      this.setState({ new_password: '', old_password: '', changePassword: false });
     } catch (error) {
       console.log(error);
-      toast.error(`Something went wrong ${error}`);
+      toast.error("Something went wrong!")
     }
   };
 
   componentDidMount() {
-    this.fetchUserData();
+    // this.fetchUserData();
   }
 
   fetchUserData = async () => {
@@ -79,7 +75,7 @@ class UserProfile extends Component {
   };
 
   render() {
-    const { userInfo, changePassword, password, newPassword } = this.state;
+    const { userInfo, changePassword, old_password, new_password } = this.state;
 
     return (
       <div className="container d-flex flex-column  justify-content-center align-items-center vh-100">
@@ -108,23 +104,23 @@ class UserProfile extends Component {
             <div className="form-group">
               <label className='mb-1'>Current Password</label>
               <input
-                  type="password"
+                  type="text"
                   className="form-control"
                   required
                   placeholder="Enter current password"
-                  value={password}
-                  onChange={(e) => this.setState({ password: e.target.value })}
+                  value={old_password}
+                  onChange={(e) => this.setState({ old_password: e.target.value })}
               />
             </div>
             <div className="form-group">
               <label className='mb-1'>New Password</label>
               <input
-                  type="password"
+                  type="text"
                   className="form-control"
                   required
                   placeholder="Enter new password"
-                  value={newPassword}
-                  onChange={(e) => this.setState({ newPassword: e.target.value })}
+                  value={new_password}
+                  onChange={(e) => this.setState({ new_password: e.target.value })}
               />
             </div>
 

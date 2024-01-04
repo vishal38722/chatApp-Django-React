@@ -1,6 +1,6 @@
 // Import necessary dependencies
 import React, { useEffect, useState } from 'react';
-import '../css/auth.css'; 
+import '../css/style.css'; 
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -67,7 +67,7 @@ const Login = () => {
               Password
             </label>
             <input
-              type="password"
+              type="text"
               className="form-control"
               id="password"
               placeholder="Password"

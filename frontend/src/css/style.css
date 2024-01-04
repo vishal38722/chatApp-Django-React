@@ -27,3 +27,7 @@
     margin-bottom: 16px;
   }
   
+  .sidebar-container::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+  }

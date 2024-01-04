@@ -83,7 +83,7 @@ const SignUp = () => {
               Password
             </label>
             <input
-              type="text"
+              type="password"
               className="form-control"
               id="password"
               placeholder="Password"
@@ -99,7 +99,7 @@ const SignUp = () => {
               Confirm Password
             </label>
             <input
-              type="text"
+              type="password"
               className="form-control"
               id="confirmPassword"
               placeholder="Confirm Password"

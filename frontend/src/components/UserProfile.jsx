@@ -104,7 +104,7 @@ class UserProfile extends Component {
             <div className="form-group">
               <label className='mb-1'>Current Password</label>
               <input
-                  type="text"
+                  type="password"
                   className="form-control"
                   required
                   placeholder="Enter current password"
@@ -115,7 +115,7 @@ class UserProfile extends Component {
             <div className="form-group">
               <label className='mb-1'>New Password</label>
               <input
-                  type="text"
+                  type="password"
                   className="form-control"
                   required
                   placeholder="Enter new password"

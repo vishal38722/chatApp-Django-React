@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 const Login = () => {
   useEffect(() => {
+    console.log("Login Page")
     if(localStorage.getItem('token')){
       navigate('/')
     }

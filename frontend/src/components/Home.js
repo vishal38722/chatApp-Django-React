@@ -12,23 +12,22 @@ const Home = () => {
   const [users, setUsers] = useState([])
 
   useEffect(() => {
+    console.log("Home Page")
     const token = localStorage.getItem('token');
-    console.log(token)
-    const fetchData = async () => {
-      const { data } = await axios.get("http://localhost:8000/api/exclude_user/", {
-        headers: {
-          'Authorization': `Token ${token}`,
-        },
-      });
-      console.log(data)
-      setUsers(data)
-    }
-    fetchData();
-  }, [])
-
-  useEffect(() => {
-    if(!localStorage.getItem('token')){
+    if(!token){
       navigate('/login')
+    }else{
+      console.log(token)
+      const fetchData = async () => {
+        const { data } = await axios.get("http://localhost:8000/api/exclude_user/", {
+          headers: {
+            'Authorization': `Token ${token}`,
+          },
+        });
+        console.log(data)
+        setUsers(data)
+      }
+      fetchData();
     }
   }, [])
 

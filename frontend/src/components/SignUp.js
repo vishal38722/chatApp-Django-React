@@ -27,10 +27,6 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { username, email, password } = formData;
-    // if(!username || !email || !password){
-    //   toast.error("Please fill the complete form")
-    //   return;
-    // }
       const { data } = await axios.post("http://localhost:8000/register/", {
         username,
         email,
@@ -48,7 +44,23 @@ const SignUp = () => {
         <form className="mt-3" onSubmit={handleSubmit}>
           <div className="">
             <label htmlFor="username" className="form-label">
-              Full Name
+              First Name
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="username"
+              placeholder="Enter full name"
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <div className="">
+            <label htmlFor="username" className="form-label">
+              Last Name
             </label>
             <input
               type="text"

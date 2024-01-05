@@ -81,3 +81,16 @@ def change_password(request):
 
         return Response({'detail': 'Password changed successfully.'}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@authentication_classes([CustomTokenAuthentication])
+@permission_classes([IsCustomAuthenticated])
+def get_user_data(request):
+    user = request.user
+
+    return Response({
+        'id': user.id,
+        'email': user.email,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+    })

@@ -9,7 +9,7 @@ import Error404 from './components/Error404';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 import RessetPassword from './components/ResetPassword';
-import UserProfile from './components/UserProfile';
+import UserProfile, {UserProfileFB} from './components/UserProfile';
 
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
           <Route path='/signup' element={<SignUp />} />
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password/:token' element={<RessetPassword />} />
-          <Route path='/profile' element={<UserProfile />} />
+          <Route path='/profile' element={<UserProfileFB />} />
           <Route path='*' element={<Error404 />} />
 
         </Routes>

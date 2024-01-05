@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
 class UserProfile extends Component {
   constructor(props) {
@@ -18,7 +20,6 @@ class UserProfile extends Component {
 
   handleUpdatePassword = async (e) => {
     e.preventDefault();
-
     const { old_password, new_password } = this.state;
 
     if (!old_password || !new_password) {
@@ -54,7 +55,7 @@ class UserProfile extends Component {
   };
 
   componentDidMount() {
-    // this.fetchUserData();
+    this.fetchUserData();
   }
 
   fetchUserData = async () => {
@@ -66,7 +67,7 @@ class UserProfile extends Component {
         }
       });
 
-      const user = response.data.user_info;
+      const user = response.data;
       console.log('User:', user);
       this.setState({ userInfo: user });
     } catch (error) {
@@ -77,15 +78,20 @@ class UserProfile extends Component {
   render() {
     const { userInfo, changePassword, old_password, new_password } = this.state;
 
+    if (!this.token) {
+      return <Navigate to="/login" />;
+  }
+
     return (
       <div className="container d-flex flex-column  justify-content-center align-items-center vh-100">
         {userInfo && 
         <div className="border p-4 rounded bg-light " style={{minWidth: "40%"}}>
+          <Link to='/'>Back to ChatPage</Link>
           <h2 className="mb-4 text-center ">User Profile</h2>
 
           <div className="form-group">
             <label className='mb-1'>Username</label>
-            <input type="text" className="form-control" value={userInfo.username} readOnly disabled  />
+            <input type="text" className="form-control" value={`${userInfo.first_name} ${userInfo.last_name}`} readOnly disabled  />
           </div>
 
           <div className="form-group">
@@ -132,6 +138,11 @@ class UserProfile extends Component {
       </div>
     );
   }
+}
+
+export function UserProfileFB(props){
+  const navigate = useNavigate();
+  return (<UserProfile navigate={navigate}></UserProfile>)
 }
 
 export default UserProfile;

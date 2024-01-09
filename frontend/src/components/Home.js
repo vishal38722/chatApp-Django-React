@@ -38,13 +38,8 @@ const Home = () => {
   return (
     <div className="container-fluid overflow-hidden" style={{height: "100vh"}}>
       <div className="row">
-        <div className="col-md-6 col-lg-3 border-dark-subtle p-3 rounded-3  bg-secondary-subtle">
-          <div className="text-center text-black ">
-          <Link to="/profile" className="text-decoration-none text-black mb-3">
-            <h4>Users</h4>
-            </Link>
-            <Sidebar users={users} onUserClick={handleUserClick} />
-          </div>
+        <div className="col-md-6 col-lg-3 rounded-3  bg-secondary-subtle">
+          <Sidebar users={users} onUserClick={handleUserClick} />
         </div>
         <div className="col-md-6 col-lg-9 min-vh-100  border-5 bg-light">
           <div className="text-center text-black">

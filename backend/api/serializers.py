@@ -7,6 +7,4 @@ class UserGetSerializer(serializers.ModelSerializer):
         fields=["email","first_name","last_name","id"]
         extra_kwargs={"id":{"read_only":True}}
 
-class ChangePasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
+                        

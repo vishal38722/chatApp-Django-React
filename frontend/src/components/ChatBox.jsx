@@ -65,7 +65,7 @@ const ChatBox = ({user}) => {
       {/* form */}
       <div className="fixed-bottom d-flex align-items-center flex-row justify-content-end rounded-3">
         <div className="col-12 col-md-6 col-lg-9 offset-md-3 bg-light p-1">
-          <form onSubmit={handleSubmit} className="d-flex align-items-center flex-row justify-content-end  gap-3 ">
+          <form onSubmit={handleSubmit} className="d-none d-md-flex align-items-center flex-row justify-content-end  gap-3 ">
             <input
               type="text"
               className="form-control p-3"

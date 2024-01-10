@@ -14,7 +14,8 @@ const SignUp = () => {
   }, [])
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '',
+    first_name: '',
+    last_name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -26,9 +27,10 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, email, password } = formData;
+    const { first_name, last_name, email, password } = formData;
       const { data } = await axios.post("http://localhost:8000/register/", {
-        username,
+        first_name,
+        last_name,
         email,
         password,
       });
@@ -43,32 +45,32 @@ const SignUp = () => {
         <h2 className="text-center">Create a new Account</h2>
         <form className="mt-3" onSubmit={handleSubmit}>
           <div className="">
-            <label htmlFor="username" className="form-label">
+            <label htmlFor="first_name" className="form-label">
               First Name
             </label>
             <input
               type="text"
               className="form-control"
-              id="username"
-              placeholder="Enter full name"
-              name="username"
-              value={formData.username}
+              id="first_name"
+              placeholder="Enter First name"
+              name="first_name"
+              value={formData.first_name}
               onChange={handleInputChange}
               required
             />
           </div>
 
           <div className="">
-            <label htmlFor="username" className="form-label">
+            <label htmlFor="last_name" className="form-label">
               Last Name
             </label>
             <input
               type="text"
               className="form-control"
-              id="username"
-              placeholder="Enter full name"
-              name="username"
-              value={formData.username}
+              id="last_name"
+              placeholder="Enter Last name"
+              name="last_name"
+              value={formData.last_name}
               onChange={handleInputChange}
               required
             />

@@ -90,7 +90,7 @@ class UserProfile extends Component {
           <h2 className="mb-4 text-center ">User Profile</h2>
 
           <div className="form-group">
-            <label className='mb-1'>Username</label>
+            <label className='mb-1'>Full Name</label>
             <input type="text" className="form-control" value={`${userInfo.first_name} ${userInfo.last_name}`} readOnly disabled  />
           </div>
 

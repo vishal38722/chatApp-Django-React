@@ -12,10 +12,10 @@ const UserItem = ({user, onUserClick}) => {
                 <div>
                     <p className="fw-bold text-gray-800 mb-1">
                         {/* {user.name} */}
-                        {`${user.first_name} ${user.last_name}`}
+                        {`${user?.first_name} ${user?.last_name}`}
                     </p>
                     <span className="text-muted fs-6">
-                        {user.email}
+                        {user?.email}
                     </span>
                 </div>
             </div>

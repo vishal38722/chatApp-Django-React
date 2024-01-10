@@ -11,7 +11,7 @@ const Sidebar = ({ users, onUserClick, selectedUser }) => {
       <div className=' col-lg-2 d-none d-md-flex col-md-2  '>
         <DesktopNavbar />
       </div>
-      <div className={`sidebar-container ${selectedUser ? 'd-none d-md-inline ' : 'col-sm-12'} col-lg-10 col-md-10 ml-md-3`} style={{ maxHeight: '99vh', overflowY: 'auto'}}>
+      <div className={`sidebar-container ${selectedUser ? 'd-none d-md-inline ' : 'col-12'} col-lg-10 col-md-10 ml-md-3`} style={{ maxHeight: '99vh', overflowY: 'auto'}}>
         <p className='fs-3 text-center'>Users</p>
         {/* Search bar */}
         <div>

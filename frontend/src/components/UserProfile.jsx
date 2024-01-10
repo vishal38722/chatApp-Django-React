@@ -60,7 +60,7 @@ class UserProfile extends Component {
 
   fetchUserData = async () => {
     try {
-      const response = await axios.get('/user/', {
+      const response = await axios.get('http://localhost:8000/user/', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Token ${this.token}`

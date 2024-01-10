@@ -20,7 +20,7 @@ const Header = ({user, onUserClick}) => {
                     <FaUser size={35} />
                 </span>
             </div>
-            <div className="d-flex flex-column">
+            <div className="d-flex flex-column" style={{cursor: 'pointer'}} onClick={handleShow}>
                 <div className='fs-4'>{`${user.first_name} ${user.last_name}`}</div>
                 <div className="fs-6 font-light text-start text-muted ">
                     Online

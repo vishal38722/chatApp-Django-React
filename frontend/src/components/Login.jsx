@@ -45,7 +45,7 @@ const Login = () => {
   return (
     <div className="container">
       <div className="card pt-5">
-        <h2 className="">Login to your Account</h2>
+        <h2 className="text-center">Login to your Account</h2>
         <form className="mt-3" onSubmit={handleSubmit}>
           <div className="">
             <label htmlFor="email" className="form-label">
@@ -82,7 +82,7 @@ const Login = () => {
           <button type="submit" className=" mt-3 btn btn-primary">
             Login
           </button>
-          <div className="mt-2 d-flex justify-content-end">
+          <div className="mt-2 d-flex justify-content-center">
             <span>
               Don't have an account? <Link to="/signup">SignUp</Link>
             </span>

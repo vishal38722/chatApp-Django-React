@@ -1,16 +1,21 @@
 import React from 'react'
 import { FaUser } from 'react-icons/fa'
 import { Button, Modal } from 'react-bootstrap';
+import { HiChevronLeft } from 'react-icons/hi'
 
-const Header = ({user}) => {
+const Header = ({user, onUserClick}) => {
     const [show, setShow] = React.useState(false);
 
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
+
   return (
     <div className="position-sticky d-flex border-bottom px-sm-4 px-6 py-4 px-lg-6 justify-content-between align-items-center border-success bg-success rounded-3 " style={{ margin: "0 -.66rem"}} >
         <div className="d-flex gap-3 align-items-center">
             <div>
+                <span className='d-inline d-md-none' style={{cursor: 'pointer'}} onClick={() => onUserClick(null)}>
+                    <HiChevronLeft size={35} />
+                </span>
                 <span>
                     <FaUser size={35} />
                 </span>

@@ -5,6 +5,7 @@ from channels.layers import get_channel_layer
 from channels.db import database_sync_to_async
 from api.models import Message
 from django.contrib.auth import get_user_model
+import datetime
 
 User=get_user_model()
 
@@ -30,6 +31,19 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
         # Receive message from WebSocket
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+
+        # sender = self.scope['user']
+        # print("Sender: ", sender)
+        sender = {
+            'id': self.scope['user'].id,
+            'first_name': self.scope['user'].first_name,
+            'last_name': self.scope['user'].last_name,
+            'email': self.scope['user'].email,
+            # Add other user fields as needed
+        }
+        print("Sender: ", sender)
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         print(f"Received message from client: {message}")
         await self.save_message(message)
 
@@ -39,7 +53,9 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message
+                'message': message,
+                'sender': sender,
+                'timestamp': timestamp
             }
         )
     @database_sync_to_async
@@ -72,10 +88,16 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
+        sender = event['sender']
+        timestamp = event['timestamp']
+        type = event['type']
+        print(type)
         print(f"Broadcasting message to clients: {message}")
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            "message": message
+            "message": message,
+            "sender": sender,
+            "timestamp": timestamp
         }))
 
 

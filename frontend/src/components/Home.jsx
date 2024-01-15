@@ -9,7 +9,8 @@ const Home = () => {
 
   const [selectedUser, setSelectedUser] = useState(null);
   const navigate = useNavigate();
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
+  const [webSocket, setWebSocket] = useState(null);
 
   useEffect(() => {
     console.log("Home Page")
@@ -31,6 +32,43 @@ const Home = () => {
     }
   }, [])
 
+  useEffect(() => {
+    if(selectedUser !== null){
+      console.log("selectedUser: ", selectedUser);
+      const token = localStorage.getItem('token');
+      // Set up WebSocket connection
+      const ws = new WebSocket(`ws://localhost:8000/ws/api/${selectedUser.id}/?token=${token}`);
+      setWebSocket(ws);
+
+      ws.addEventListener('open', () => {
+        console.log('WebSocket connected');
+      });
+
+      // ws.addEventListener('message', (event) => {
+      //   console.log("Event in Home: ", event)
+      //   const data = JSON.parse(event.data);
+      //   console.log('Received message from server:', data);
+      //   // Handle the incoming message, update state, etc.
+      // });
+
+      ws.addEventListener('error', (error) => {
+        console.error('WebSocket encountered an error:', error);
+      });
+
+      ws.addEventListener('close', () => {
+        console.log('WebSocket closed');
+      });
+
+      // Clean up WebSocket connection on component unmount
+      return () => {
+        if (webSocket) {
+          webSocket.close();
+        }
+      };
+    }
+  }, [selectedUser])
+
+
   const handleUserClick = (user) => {
     setSelectedUser(user);
   };
@@ -44,7 +82,7 @@ const Home = () => {
         <div className="col-md-6 col-lg-9 min-vh-100  border-5 bg-light">
           <div className="text-center text-black">
             {selectedUser ? (
-              <ChatBox user={selectedUser} onUserClick={handleUserClick} />
+              <ChatBox selectedUser={selectedUser} onUserClick={handleUserClick} webSocket={webSocket}/>
             ) : (
               <EmptyState />
             )}

@@ -3,7 +3,7 @@ import { FaUser } from 'react-icons/fa'
 import { Button, Modal } from 'react-bootstrap';
 import { HiChevronLeft } from 'react-icons/hi'
 
-const Header = ({user, onUserClick}) => {
+const Header = ({selectedUser, onUserClick}) => {
     const [show, setShow] = React.useState(false);
 
     const handleShow = () => setShow(true);
@@ -21,7 +21,7 @@ const Header = ({user, onUserClick}) => {
                 </span>
             </div>
             <div className="d-flex flex-column" style={{cursor: 'pointer'}} onClick={handleShow}>
-                <div className='fs-4'>{`${user.first_name} ${user.last_name}`}</div>
+                <div className='fs-4'>{`${selectedUser.first_name} ${selectedUser.last_name}`}</div>
                 <div className="fs-6 font-light text-start text-muted ">
                     Online
                 </div>
@@ -33,10 +33,10 @@ const Header = ({user, onUserClick}) => {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <h4>{`${user.first_name} ${user.last_name}`}</h4>
+          <h4>{`${selectedUser.first_name} ${selectedUser.last_name}`}</h4>
         </Modal.Header>
         <Modal.Body>
-          <p>{user.email}</p>
+          <p>{selectedUser.email}</p>
           </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>Close</Button>

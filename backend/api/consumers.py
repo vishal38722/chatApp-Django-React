@@ -5,7 +5,8 @@ from channels.layers import get_channel_layer
 from channels.db import database_sync_to_async
 from api.models import Message
 from django.contrib.auth import get_user_model
-import datetime
+from django.core.exceptions import ObjectDoesNotExist
+from asgiref.sync import sync_to_async
 
 User=get_user_model()
 
@@ -25,25 +26,48 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
                     self.channel_name
                 )
             print(f"Added to group: {self.room_group_name}") 
+            
             await self.accept()
+            await self.send_existing_chat_history()
+    async def send_existing_chat_history(self):
 
+        # Retrieve existing chat history from the database
+        sender = self.scope['user']
+        receiver_id = self.scope['url_route']['kwargs']['id']
+
+        # Convert receiver_id to an integer (if it's not already)
+        try:
+            receiver_id = int(receiver_id)
+        except ValueError:
+            print("Invalid receiver_id. It should be a valid integer.")
+            return
+
+        # Use database_sync_to_async for synchronous database operations
+        try:
+            receiver = await sync_to_async(User.objects.get)(id=receiver_id)
+        except ObjectDoesNotExist:
+            print(f"User with ID {receiver_id} does not exist.")
+            return
+
+        chat_history_queryset = await database_sync_to_async(Message.objects.filter)(
+            sender__in=[sender, receiver],
+            receiver__in=[sender, receiver]
+        )
+        chat_history = await sync_to_async(list)(chat_history_queryset)
+
+        # Sort the list based on timestamp
+        chat_history = sorted(chat_history, key=lambda x: x.timestamp)
+
+        # Send each message to the user
+        for chat in chat_history:
+            await self.send(text_data=json.dumps({
+                "message": chat.content
+            }))
+        
     async def receive(self, text_data):
         # Receive message from WebSocket
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-
-        # sender = self.scope['user']
-        # print("Sender: ", sender)
-        sender = {
-            'id': self.scope['user'].id,
-            'first_name': self.scope['user'].first_name,
-            'last_name': self.scope['user'].last_name,
-            'email': self.scope['user'].email,
-            # Add other user fields as needed
-        }
-        print("Sender: ", sender)
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
         print(f"Received message from client: {message}")
         await self.save_message(message)
 
@@ -53,16 +77,15 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message,
-                'sender': sender,
-                'timestamp': timestamp
+                'message': message
             }
         )
     @database_sync_to_async
     def save_message(self, message_content):
         sender = self.scope['user']
         receiver_id = self.scope['url_route']['kwargs']['id']
-        receiver = User.objects.get(id=receiver_id)
+        # receiver = User.objects.get(id=receiver_id)
+        receiver = (User.objects.get)(id=receiver_id)
 
         # Check if a chat history already exists between sender and receiver
         chat_history_exists = Message.objects.filter(
@@ -88,16 +111,10 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
-        sender = event['sender']
-        timestamp = event['timestamp']
-        type = event['type']
-        print(type)
         print(f"Broadcasting message to clients: {message}")
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            "message": message,
-            "sender": sender,
-            "timestamp": timestamp
+            "message": message
         }))
 
 

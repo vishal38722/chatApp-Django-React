@@ -7,7 +7,6 @@ import toast from 'react-hot-toast';
 
 const Login = () => {
   useEffect(() => {
-    console.log("Login Page")
     if(localStorage.getItem('token')){
       navigate('/')
     }
@@ -26,18 +25,15 @@ const Login = () => {
     e.preventDefault();
     const { email, password } = formData;
     try{
-
       const { data } = await axios.post('http://localhost:8000/login/', {
         email,
         password,
       });
-      console.log(data);
       localStorage.setItem('token', data.token);
-      console.log('Login Successful');
       toast.success("Login Successful");
       navigate("/");
     }catch(error){
-      console.log(error);
+      console.log(error)
       toast.error("Something went wrong!")
     }
   };

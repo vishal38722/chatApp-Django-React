@@ -7,14 +7,16 @@ from api.models import Message
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from asgiref.sync import sync_to_async
+<<<<<<< HEAD
+=======
+import datetime
+>>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d
 
 User=get_user_model()
 
 class PersonalChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         request_user = self.scope['user']
-        print(request_user)
-        print("-----------------------------")
         if request_user.is_authenticated:  
             chat_with_user = self.scope['url_route']['kwargs']['id']
             user_ids = [int(request_user.id), int(chat_with_user)]
@@ -25,11 +27,64 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
                     self.room_group_name,
                     self.channel_name
                 )
+<<<<<<< HEAD
             print(f"Added to group: {self.room_group_name}") 
             
             await self.accept()
             await self.send_existing_chat_history()
     async def send_existing_chat_history(self):
+=======
+            # print(f"Added to group: {self.room_group_name}") 
+            await self.accept()
+            await self.send_existing_chat_history()
+
+    async def send_existing_chat_history(self):
+        # Retrieve existing chat history from the database
+        sender = self.scope['user']
+        receiver_id = self.scope['url_route']['kwargs']['id']
+
+        # Convert receiver_id to an integer (if it's not already)
+        try:
+            receiver_id = int(receiver_id)
+        except ValueError:
+            # print("Invalid receiver_id. It should be a valid integer.")
+            return
+
+        # Use database_sync_to_async for synchronous database operations
+        try:
+            receiver = await sync_to_async(User.objects.get)(id=receiver_id)
+        except ObjectDoesNotExist:
+            # print(f"User with ID {receiver_id} does not exist.")
+            return
+        
+
+        chat_history_queryset = await database_sync_to_async(Message.objects.filter)(
+            sender__in=[sender, receiver],
+            receiver__in=[sender, receiver]
+        )
+        chat_history = await sync_to_async(list)(chat_history_queryset)
+        chat_history = sorted(chat_history, key=lambda x: x.timestamp)
+
+        sender = {
+            'id': sender.id,
+            'first_name': sender.first_name,
+            'last_name': sender.last_name,
+            'email': sender.email,
+        }
+        receiver = {
+            'id': receiver.id,
+            'first_name': receiver.first_name,
+            'last_name': receiver.last_name,
+            'email': receiver.email,
+        }
+        message_content = []
+        for chat in chat_history:
+            message_content += chat.content
+        message_content = sorted(message_content, key=lambda x: x['timestamp'])
+        await self.send(text_data=json.dumps({
+            "message": message_content
+        }))
+>>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d
 
         # Retrieve existing chat history from the database
         sender = self.scope['user']
@@ -68,18 +123,41 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
         # Receive message from WebSocket
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+<<<<<<< HEAD
         print(f"Received message from client: {message}")
         await self.save_message(message)
 
         
         # Send message to room group
+=======
+        sender = {
+            'id': self.scope['user'].id,
+            'first_name': self.scope['user'].first_name,
+            'last_name': self.scope['user'].last_name,
+            'email': self.scope['user'].email,
+        }
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        message_content = json.dumps({
+            "message": message,
+            "timestamp": timestamp,
+            "sender": sender['id']
+        })
+        message_content = json.loads(message_content)
+        await self.save_message(message_content)
+
+>>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
+<<<<<<< HEAD
                 'message': message
+=======
+                'message': message_content
+>>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d
             }
         )
+
     @database_sync_to_async
     def save_message(self, message_content):
         sender = self.scope['user']
@@ -98,23 +176,32 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             Message.objects.create(
                 sender=sender,
                 receiver=receiver,
-                content=message_content
+                content=[message_content]
             )
         else:
             # If chat history exists, update the existing message or handle as needed
             # For example, you might want to append the new message to the existing chat history
             existing_chat = Message.objects.filter(sender=sender, receiver=receiver).first()
-            existing_chat.content += f"\n{message_content}"
+            if isinstance(existing_chat.content, str):
+                existing_chat.content = [json.loads(existing_chat.content)]
+            existing_chat.content.append(message_content)
             existing_chat.save()
 
             
     # Receive message from room group
     async def chat_message(self, event):
+<<<<<<< HEAD
         message = event['message']
         print(f"Broadcasting message to clients: {message}")
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             "message": message
+=======
+        message_content = event['message']
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            "message": message_content
+>>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d
         }))
 
 

@@ -18,13 +18,13 @@ from django.contrib import admin
 from django.urls import path,include
 from rest_framework.authtoken import views
 from paralaxiom_auth.views import Register_api,login_api
-from api.views import get_user_list
+from api.views import get_user_list, get_user_data
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api-token-auth/', views.obtain_auth_token),
     path("register/",Register_api),
-    # path("api/user/",get_user_data),
+    path("api/user/",get_user_data),
     path("login/",login_api),
     path("api/exclude_user/",get_user_list),
 ]

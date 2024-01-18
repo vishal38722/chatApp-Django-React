@@ -7,7 +7,6 @@ import { Navigate } from "react-router-dom";
 class UserProfile extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       userInfo: {},
       old_password: '',
@@ -60,7 +59,7 @@ class UserProfile extends Component {
 
   fetchUserData = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/user/', {
+      const response = await axios.get('http://localhost:8000/api/user/', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Token ${this.token}`
@@ -68,7 +67,6 @@ class UserProfile extends Component {
       });
 
       const user = response.data;
-      console.log('User:', user);
       this.setState({ userInfo: user });
     } catch (error) {
       console.error('Error fetching user data:', error);

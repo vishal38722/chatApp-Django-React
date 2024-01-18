@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import Sidebar from './Sidebar'
 import ChatBox from './ChatBox'
 import EmptyState from './EmptyState'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 const Home = () => {
@@ -13,19 +13,16 @@ const Home = () => {
   const [webSocket, setWebSocket] = useState(null);
 
   useEffect(() => {
-    console.log("Home Page")
     const token = localStorage.getItem('token');
     if(!token){
       navigate('/login')
     }else{
-      console.log(token)
       const fetchData = async () => {
         const { data } = await axios.get("http://localhost:8000/api/exclude_user/", {
           headers: {
             'Authorization': `Token ${token}`,
           },
         });
-        console.log(data)
         setUsers(data)
       }
       fetchData();
@@ -34,31 +31,11 @@ const Home = () => {
 
   useEffect(() => {
     if(selectedUser !== null){
-      console.log("selectedUser: ", selectedUser);
       const token = localStorage.getItem('token');
       // Set up WebSocket connection
       const ws = new WebSocket(`ws://localhost:8000/ws/api/${selectedUser.id}/?token=${token}`);
       setWebSocket(ws);
-
-      ws.addEventListener('open', () => {
-        console.log('WebSocket connected');
-      });
-
-      // ws.addEventListener('message', (event) => {
-      //   console.log("Event in Home: ", event)
-      //   const data = JSON.parse(event.data);
-      //   console.log('Received message from server:', data);
-      //   // Handle the incoming message, update state, etc.
-      // });
-
-      ws.addEventListener('error', (error) => {
-        console.error('WebSocket encountered an error:', error);
-      });
-
-      ws.addEventListener('close', () => {
-        console.log('WebSocket closed');
-      });
-
+      
       // Clean up WebSocket connection on component unmount
       return () => {
         if (webSocket) {

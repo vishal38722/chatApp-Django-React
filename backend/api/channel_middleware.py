@@ -11,11 +11,9 @@ class WebsocketMiddleware(BaseMiddleware):
         close_old_connections()
 
         query_string = scope.get("query_string", b"").decode("utf-8")
-        print(query_string)
         query_parameters = dict(qp.split("=") for qp in query_string.split("&") if "=" in qp)
         token = query_parameters.get("token", None)
         # token=token[3:]
-        print(token)
         if token is None:
             await send({
                 "type":"websocket.close",
@@ -24,9 +22,7 @@ class WebsocketMiddleware(BaseMiddleware):
         
         authentication=CustomTokenAuthentication()
         try:
-            user=await authentication.authenticate_websocket(scope,token)   
-            print(user)
-            print("-------------")
+            user=await authentication.authenticate_websocket(scope,token)
             if user is not None:
                 scope['user']=user
             else:

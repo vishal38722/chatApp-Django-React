@@ -34,9 +34,7 @@ const SignUp = () => {
         email,
         password,
       });
-      console.log(data)
       navigate("/login");
-      console.log('SignUp Successful');
   };
 
   return (

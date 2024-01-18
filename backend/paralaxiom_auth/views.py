@@ -11,9 +11,7 @@ from django.contrib.auth import get_user_model
 def login_api(request):
     serializer=LoginSerializer(data=request.data)
     if serializer.is_valid():
-
         user_id = serializer.validated_data.get('id')
-        print(user_id)
         try:
             user = get_user_model().objects.get(id=user_id)  # Retrieve the user based on 'user_id'
             token, _ = Token.objects.get_or_create(user=user)
@@ -28,19 +26,11 @@ def login_api(request):
 
         except get_user_model().DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-    
-
-
-
-    
 
 @api_view(['POST'])
 def Register_api(request):
-      
       serializer=UserSerializer(data=request.data)
       if serializer.is_valid():
-           
         serializer.save()
         return Response(serializer.data,status=201)
-      
       return Response(serializer.errors,400)

@@ -18,20 +18,6 @@ def get_user_list(request):
     except Exception as e:
         print("Error in getting user list", str(e))
         return Response({"error": "Error in getting user list"}, status=400)
-<<<<<<< HEAD
-
-# @api_view(["GET"])
-# @authentication_classes([CustomTokenAuthentication])
-# @permission_classes([IsCustomAuthenticated])
-# def get_user_data(request):
-#     try:
-#         user = request.user
-#         serializer = UserGetSerializer(User.objects.get(id=user.id), many=True)
-#         return Response(serializer.data, status=200)
-#     except Exception as e:
-#         print("Error in getting user data", str(e))
-#         return Response({"error": "Error in getting user list"}, status=400)
-=======
     
 @api_view(["POST"])
 @authentication_classes([CustomTokenAuthentication])
@@ -66,4 +52,3 @@ def get_user_data(request):
         'first_name': user.first_name,
         'last_name': user.last_name,
     })
->>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d

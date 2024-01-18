@@ -7,10 +7,7 @@ from api.models import Message
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from asgiref.sync import sync_to_async
-<<<<<<< HEAD
-=======
 import datetime
->>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d
 
 User=get_user_model()
 
@@ -27,13 +24,6 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
                     self.room_group_name,
                     self.channel_name
                 )
-<<<<<<< HEAD
-            print(f"Added to group: {self.room_group_name}") 
-            
-            await self.accept()
-            await self.send_existing_chat_history()
-    async def send_existing_chat_history(self):
-=======
             # print(f"Added to group: {self.room_group_name}") 
             await self.accept()
             await self.send_existing_chat_history()
@@ -84,7 +74,6 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "message": message_content
         }))
->>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d
 
         # Retrieve existing chat history from the database
         sender = self.scope['user']
@@ -123,13 +112,6 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
         # Receive message from WebSocket
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-<<<<<<< HEAD
-        print(f"Received message from client: {message}")
-        await self.save_message(message)
-
-        
-        # Send message to room group
-=======
         sender = {
             'id': self.scope['user'].id,
             'first_name': self.scope['user'].first_name,
@@ -145,16 +127,11 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
         message_content = json.loads(message_content)
         await self.save_message(message_content)
 
->>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
-<<<<<<< HEAD
-                'message': message
-=======
                 'message': message_content
->>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d
             }
         )
 
@@ -190,18 +167,10 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             
     # Receive message from room group
     async def chat_message(self, event):
-<<<<<<< HEAD
-        message = event['message']
-        print(f"Broadcasting message to clients: {message}")
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            "message": message
-=======
         message_content = event['message']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             "message": message_content
->>>>>>> 4f57a039d9665b68ee1592bc5d0ef261dc3dd94d
         }))
 
 

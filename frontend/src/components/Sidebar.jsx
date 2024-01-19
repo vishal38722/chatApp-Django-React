@@ -5,14 +5,17 @@ import { IoIosSearch } from "react-icons/io";
 import '../css/style.css';
 import DesktopNavbar from './DesktopNavbar';
 import MobileFooter from './MobileFooter';
+import Loader from './Loader';
 
-const Sidebar = ({ users, onUserClick, selectedUser }) => {
+const Sidebar = ({ users, onUserClick, selectedUser, loading }) => {
 
   const [searchText, setSearchText] = useState('');
 
   const allUsers = users.filter((user) => {
     return user.first_name.toLowerCase().includes(searchText.toLowerCase()) || user.last_name.toLowerCase().includes(searchText.toLowerCase());
   });
+
+  if(loading) return <Loader />
 
   return (
     <div className='d-flex flex-row'>
@@ -23,7 +26,6 @@ const Sidebar = ({ users, onUserClick, selectedUser }) => {
         {/* Search bar */}
         <div className='d-flex w-100 align-items-center mt-1'>
           <input type="text" className="form-control" onChange={(e) => setSearchText(e.target.value)} placeholder="Search or start a new chat" />
-          
           <IoIosSearch size={20} className=" col-1 mb-3" />
         </div>
         <div>

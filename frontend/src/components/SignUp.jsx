@@ -27,14 +27,27 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { first_name, last_name, email, password } = formData;
+
+    const { first_name, last_name, email, password, confirmPassword } = formData;
+
+    if(password!==confirmPassword){
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    try{
       const { data } = await axios.post("http://localhost:8000/register/", {
         first_name,
         last_name,
         email,
         password,
       });
+      toast.success("Account created successfully, please login to proceed");
       navigate("/login");
+    } catch(error){
+      console.log(error);
+      toast.error(`Something went wrong ${error?.response?.data?.email || error?.response?.data?.message}`);
+    }
   };
 
   return (

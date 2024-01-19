@@ -4,10 +4,12 @@ import { FaUser } from "react-icons/fa";
 import {HiPaperAirplane} from "react-icons/hi2";
 import MessageBox from "./MessageBox";
 import Header from "./Header";
+import Loader from "./Loader";
 
 const ChatBox = ({selectedUser, onUserClick, webSocket}) => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setMessages([]);
@@ -21,9 +23,10 @@ const ChatBox = ({selectedUser, onUserClick, webSocket}) => {
         }else{
           setMessages(prevMessages => [...prevMessages, { message: data.message }]);
         }
+        setLoading(false);
       });
     }
-  }, [webSocket]);
+  }, [webSocket, loading]);
   
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,6 +35,8 @@ const ChatBox = ({selectedUser, onUserClick, webSocket}) => {
       setNewMessage("");
     }
   }
+
+  if(loading) return <Loader />
 
   return (
     <div style={{width: "inherit"}}>

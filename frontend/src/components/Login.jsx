@@ -34,7 +34,7 @@ const Login = () => {
       navigate("/");
     }catch(error){
       console.log(error)
-      toast.error("Something went wrong!")
+      toast.error(`Something went wrong! ${error?.response?.statusText}`);
     }
   };
 

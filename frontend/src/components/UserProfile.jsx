@@ -3,6 +3,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navigate } from "react-router-dom";
+import Loader from './Loader';
 
 class UserProfile extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class UserProfile extends Component {
       old_password: '',
       new_password: '',
       changePassword: false,
+      loading: false,
     };
 
     this.token = localStorage.getItem('token');
@@ -26,15 +28,15 @@ class UserProfile extends Component {
       return;
     }
 
-    // if (new_password.length < 8) {
-    //   toast.error("Password length should be greater than or equal to 8");
-    //   return;
-    // }
+    if (new_password.length < 8) {
+      toast.error("Password length should be greater than or equal to 8");
+      return;
+    }
 
-    // if (new_password.length > 12) {
-    //   toast.error("Password length should be less than or equal to 12");
-    //   return;
-    // }
+    if (new_password.length > 12) {
+      toast.error("Password length should be less than or equal to 12");
+      return;
+    }
 
     try {
       const body = { old_password, new_password };
@@ -49,7 +51,7 @@ class UserProfile extends Component {
       this.setState({ new_password: '', old_password: '', changePassword: false });
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong!")
+      toast.error(`Something went wrong ${error}`);
     }
   };
 
@@ -70,15 +72,23 @@ class UserProfile extends Component {
       this.setState({ userInfo: user });
     } catch (error) {
       console.error('Error fetching user data:', error);
+    } finally {
+      this.setState({ loading: false });
     }
   };
 
   render() {
-    const { userInfo, changePassword, old_password, new_password } = this.state;
+    const { userInfo, changePassword, old_password, new_password, loading } = this.state;
 
     if (!this.token) {
       return <Navigate to="/login" />;
-  }
+    }
+
+    if(loading){
+      return (
+        <Loader />
+      )
+    }
 
     return (
       <div className="container d-flex flex-column  justify-content-center align-items-center vh-100">

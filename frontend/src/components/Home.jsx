@@ -4,6 +4,7 @@ import ChatBox from './ChatBox'
 import EmptyState from './EmptyState'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import toast from 'react-hot-toast'
 
 const Home = () => {
 
@@ -11,21 +12,29 @@ const Home = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [webSocket, setWebSocket] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if(!token){
       navigate('/login')
     }else{
-      const fetchData = async () => {
-        const { data } = await axios.get("http://localhost:8000/api/exclude_user/", {
-          headers: {
-            'Authorization': `Token ${token}`,
-          },
-        });
-        setUsers(data)
+      try{
+        const fetchData = async () => {
+          const { data } = await axios.get("http://localhost:8000/api/exclude_user/", {
+            headers: {
+              'Authorization': `Token ${token}`,
+            },
+          });
+          setUsers(data)
+        }
+        fetchData();
+      } catch(error){
+        console.log(error);
+        toast.error(`Error fetching users`);
+      } finally{
+        setLoading(false);
       }
-      fetchData();
     }
   }, [])
 
@@ -54,12 +63,12 @@ const Home = () => {
     <div className="container-fluid overflow-hidden" style={{height: "100vh"}}>
       <div className="row">
         <div className="col-md-6 col-lg-3 rounded-3  bg-secondary-subtle">
-          <Sidebar users={users} onUserClick={handleUserClick} selectedUser={selectedUser} />
+          <Sidebar users={users} onUserClick={handleUserClick} selectedUser={selectedUser} loading={loading} />
         </div>
         <div className="col-md-6 col-lg-9 min-vh-100  border-5 bg-light">
           <div className="text-center text-black">
             {selectedUser ? (
-              <ChatBox selectedUser={selectedUser} onUserClick={handleUserClick} webSocket={webSocket}/>
+              <ChatBox selectedUser={selectedUser} onUserClick={handleUserClick} webSocket={webSocket} />
             ) : (
               <EmptyState />
             )}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { format } from "date-fns";
 import { FaUser } from "react-icons/fa";
 import {HiPaperAirplane} from "react-icons/hi2";
@@ -11,22 +11,42 @@ const ChatBox = ({selectedUser, onUserClick, webSocket}) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
   useEffect(() => {
     setMessages([]);
-    if (webSocket) {
-      webSocket.addEventListener('message', (event) => {
-        const data = JSON.parse(event.data);
-        if(Array.isArray(data.message)){
-          for(const key in data.message){
-            setMessages(prevMessages => [...prevMessages, { message: data.message[key] }]);
-          }
-        }else{
-          setMessages(prevMessages => [...prevMessages, { message: data.message }]);
+    const handleWebSocketMessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log(data, "Data");
+      if(Array.isArray(data.message)){
+      for(const key in data.message){
+          setMessages(prevMessages => [...prevMessages, { message: data.message[key] }]);
         }
-        setLoading(false);
-      });
+      }else{
+        setMessages(prevMessages => [...prevMessages, { message: data.message }]);
+      }
+      setLoading(false);
+    };
+  
+    if (webSocket) {
+      webSocket.addEventListener('message', handleWebSocketMessage);
     }
+  
+    return () => {
+      if (webSocket) {
+        webSocket.removeEventListener('message', handleWebSocketMessage);
+      }
+    };
   }, [webSocket, loading]);
+  
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages])
   
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,6 +65,7 @@ const ChatBox = ({selectedUser, onUserClick, webSocket}) => {
         {messages.map((message, index) => (
           <MessageBox data={message} key={index} selectedUser={selectedUser}/> 
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <div className="fixed-bottom d-flex align-items-center flex-row justify-content-end rounded-3">
         <div className="col-12 col-md-6 col-lg-9 offset-md-3 bg-light p-1">
